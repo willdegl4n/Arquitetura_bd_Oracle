@@ -6,8 +6,8 @@ O que chamamos de “banco de dados” no Oracle, é, na verdade, composto por t
 
 - Processos em Background
 - Estrutura de Memória
-Obs: O que chamamos de “Instancia” e composto por esses dois componentes, uma instância nada mais é do que o banco de dados carregado na memória. 
 - Estrutura Física
+    Obs: O que chamamos de “Instancia” e composto por esses dois componentes, uma instância nada mais é do que o banco de dados carregado na memória. 
 
 E agora vou falar sobre a "Estrutura Física"
 
