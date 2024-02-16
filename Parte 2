@@ -1,0 +1,27 @@
+Arquitetura do banco de dados Oracle (Parte 2)
+
+Dando continuidade sobre os conceitos da arquitetura do banco de dados Oracle
+
+O que chamamos de “banco de dados” no Oracle, é, na verdade, composto por três componentes principais:
+
+- Processos em Background
+- Estrutura de Memória
+Obs: O que chamamos de “Instancia” e composto por esses dois componentes, uma instância nada mais é do que o banco de dados carregado na memória. 
+- Estrutura Física
+
+E agora vou falar sobre as "Estruturas de Memória"
+
+--> Estrutura de Memória 
+
+A memória alocada para o banco de dados Oracle é composta por:
+
+--> Memorias (SGA): 
+- A System Global Area (SGA) é a área de memória compartilhada que contém dados e informações de controle para uma instância do Oracle Database. 
+- Todos os SERVER PROCESS e BACKGROUND PROCESS compartilham o SGA. 
+- A SGA inclui as seguintes estruturas de dados: Database Buffer Cache, Shared Pool, Redo Log Buffer, Large Pool, Java Pool, Streams Pool... etc.
+--> Memorias (PGA): 
+- A Program Global Area (PGA) é uma região de memória não compartilhada que contém dados e informações de controle exclusivamente para uso por SERVER PROCESS e BACKGROUND PROCESS. 
+- O Oracle Database cria server processes para manipular conexões com o banco de dados em nome de programas clientes (aplicações). 
+- Em um ambiente DEDICATED SERVER (forma de conexão com o banco de dados), uma PGA é criado para cada SERVER PROCESS e BACKGROUND PROCESS iniciado. 
+- Cada PGA consiste em STACK SPACE, HASH AREA, BITMAP MERGE AREA e uma USER GLOBAL AREA (UGA). 
+- Um PGA é desalocado quando o SERVER PROCESS ou o BACKGROUND PROCESS que o utiliza é finalizado.
