@@ -1,0 +1,28 @@
+Arquitetura do banco de dados Oracle (Parte 4)
+
+Nas postagens anteriores passei um overview da arquitetura passando pelos tres principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e vamos iniciar com os "Processos em Background".
+
+Segue quais são os "Processos em Background" do Oracle:
+
+--> Obrigatorios:
+- Database Writer (DBWn)
+- Log Writer (LGWR)
+- Checkpoint (CKPT)
+- Process Monitor (PMON)
+- System Monitor (SMON)
+- Recover Process (RECO)
+- Process Manager (PMAN)
+- Listener Registration (LREG)
+- Manageability Monitor Process (MMON)
+- Manageability Monitor Lite Process (MMNL)
+--> Opcionais
+- Archiver Process (ARCn)
+- Job Queue Coordinator (CJQ0)
+- Recover Writer Process (RVWR)
+--> Outros processos 
+- Flashback Data Archiver (FBDA)
+- Space Manager Coordinator (SMCO)
+
+Uma observação que não mencionei, todas as informações que estou trazendo aqui são da arquitetura no formato da versão 19c, digo isso porque desde que a arquitetura atual que foi lancada na versão 10g ela vem evoluindo cada vez mais e sempre trazendo novidades.
+
+Nas próximas postagens entrarei no detalhes sobre cada "Processo em Background" que mencionei anteriormente.
