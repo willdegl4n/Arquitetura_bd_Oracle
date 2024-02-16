@@ -1,0 +1,30 @@
+Arquitetura do banco de dados Oracle (Parte 1)
+
+Boa tarde a todos, hoje vou iniciar uma seria de postagem falando um pouco da arquitetura do banco de dados Oracle.
+
+
+E nessa primeira postagem vou fazer um overview mostrando todos os componentes macros da arquitetura.
+
+
+O que chamaos de “banco de dados” no Oracle, é, na verdade, composto por três componentes principais:
+
+- Processos em Background
+- Estrutura de Memória
+Obs: O que chamamos de “Instancia” e composto por esses dois componentes, uma instância nada mais é do que o banco de dados carregado na memória. 
+- Estrutura Física
+
+
+Hoje falarei sobre os processos em background
+
+
+--> Processos em Background:
+
+- Os BACKGROUND PROCESS fazem parte da instância do banco de dados e executam tarefas de manutenção necessárias para operar o banco de dados e maximizar o desempenho para vários usuários. 
+- Cada background processes executa uma tarefa única, mas trabalha com os outros processos. 
+- O Oracle Database cria background processes automaticamente quando você inicia uma instância de banco de dados. 
+- Os background processes que estão presentes dependem dos recursos que estão sendo usados no banco de dados. 
+- Quando você inicia uma instância de banco de dados, os background processes obrigatórios são iniciados automaticamente. 
+- Você pode iniciar background processes opcionais posteriormente, conforme necessário.
+- Os background processes obrigatórios estão presentes em todas as configurações típicas de banco de dados. Segue a lista dos background processes obrigatórios: Process Monitor Process (PMON), o Process Manager Process (PMAN), Listener Registration Process (LREG), System Monitor Process (SMON), Database Writer Process (DBWn), Checkpoint Process (CKPT), Manageability Monitor Process ( MMON), Manageability Monitor Lite Process (MMNL), Recoverer Process (RECO) e Log Writer Processes (LGWR).
+- A maioria dos background processes opcionais são específicos para tarefas ou recursos. Segue alguns background processes opcionais: Archiver Processes (ARCn), Job Queue Coordinator Process (CJQ0), Recovery Writer Process (RVWR), Flashback Data Archive Process (FBDA) e Space Management Coordinator Process (SMCO).
+- Slave processes são background processes que executam trabalho em nome de outros processos; por exemplo, Dispatcher Processes (Dnnn) e o Shared Server Process (Snnn).
