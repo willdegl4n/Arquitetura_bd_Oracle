@@ -1,0 +1,31 @@
+Arquitetura do banco de dados Oracle (Parte 5)
+
+Na postagem anterior listei os "Processos em Background", agora vou dar detalhes de cada um deles.
+
+- Obrigatorios:
+--> Database Writer (DBWn):
+- Background process que grava principalmente blocos de dados no disco (dirt blocks). 
+- Ele também lida com "checkpoints", sincronização de abertura de arquivo e registro de registros gravados em bloco. 
+- DBWn também grava no banco de dados "Smart Flash Cache", quando o Flash Cache é configurado.
+- O DBWn executa gravações em vários blocos quando possível para melhorar a eficiência. O número de blocos gravados em uma gravação multibloco varia de acordo com o sistema operacional.
+- O parâmetro de inicialização DB_WRITER_PROCESSES especifica o número de processos do Database Writer. 
+- O banco de dados seleciona uma configuração padrão apropriada para o parâmetro DB_WRITER_PROCESSES ou ajusta uma configuração especificada pelo usuário com base no número de CPUs e grupos de processadores.
+- Pode haver de 1 a 100 processos de Database Writer. Os nomes dos primeiros 36 processos do Database Writer são DBW0-DBW9 e DBWa-DBWz. Os nomes do 37º ao 100º Processos do Database Writer são BW36-BW99.
+
+--> Log Writer (LGWR):
+- Background process que grava entradas geradas no redo log buffer da System Global Area (SGA), sequencialmente em um arquivo de redo log (redo log online).
+- Se o banco de dados tiver um redo log multiplexado, o LGWR gravará as mesmas entradas de redo log em todos os membros de um grupo de arquivos de redo log.
+- O LGWR lida com as operações que são muito rápidas ou devem ser coordenadas e delega operações aos processos auxiliares do Log Writer Worker (LGnn) que podem se beneficiar de operações simultâneas, principalmente gravando o redo do buffer de log no arquivo de redo log e postando o gravação concluída no foregroud process que está aguardando.
+- Quando o LGWR escreve no redo log file online:
+- Quando um commit acontece
+- Quando ocorre um log switch
+- Quando um terço do redo log buffer esta cheio ou possui 1MB de dados 
+- Antes do DBWn escrever blocos sujos no disco 
+- A cada 3 segundos passados desde a ultima escrita
+
+--> Checkpoint (CKPT):
+- E um background process que, em momentos específicos, inicia uma solicitação de checkpoint enviando uma mensagem ao DBWn para começar a gravar buffers sujos. 
+- Controla o system change number (SCN) nas theads dos redos no banco de dados.
+- Após a conclusão das solicitações de checkpoint individual, o CKPT atualiza os cabeçalhos dos datafiles e os controlfiles para registrar o checkpoint mais recente (SCN).
+- O CKPT verifica a cada três segundos para ver se a quantidade de memória excede o valor do parâmetro de inicialização PGA_AGGREGATE_LIMIT e, em caso afirmativo, executa uma ação.
+- O CKPT pode ser executado como um thread ou um processo do sistema operacional. Além das instâncias de banco de dados, o CKPT também é executado em instâncias do Oracle Automatic Storage Management (ASM)
