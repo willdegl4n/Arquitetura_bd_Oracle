@@ -1,0 +1,26 @@
+Arquitetura do banco de dados Oracle (Parte 3)
+
+Dando continuidade sobre os conceitos da arquitetura do banco de dados Oracle
+
+O que chamamos de “banco de dados” no Oracle, é, na verdade, composto por três componentes principais:
+
+- Processos em Background
+- Estrutura de Memória
+Obs: O que chamamos de “Instancia” e composto por esses dois componentes, uma instância nada mais é do que o banco de dados carregado na memória. 
+- Estrutura Física
+
+E agora vou falar sobre a "Estrutura Física"
+
+--> Estrutura Física
+
+A estrutura física e onde de fato as informações são armazenadas la no sistema operacional, e é composta por:
+
+--> Datafiles:
+- Um banco de dados é um conjunto de arquivos físicos que armazenam dados e metadados do usuário. 
+- Os metadados consistem em informações estruturais, de configuração e de controle sobre o servidor de banco de dados. 
+- Você pode projetar seu banco de dados para ser um banco de dados de contêiner multitenant (CDB) ou um banco de dados sem contêiner (NonCDB).
+- Um banco de dados é dividido em unidades lógicas de armazenamento chamadas tablespaces, que armazenam coletivamente todos os dados do banco de dados.
+- Cada tablespace representa um ou mais arquivos de dados, e as tablespaces que geralmente aparecem são: SYSTEM, SYSAUX, USERS, TEMP e UNDO. 
+--> Systemfiles:
+- Os seguintes arquivos de sistema de banco de dados são usados durante a operação de um banco de dados Oracle e residem no servidor de banco de dados: Control Files, Online Redo Log Files. 
+Observe que os datafiles são arquivos físicos que pertencem a CDBs e NonCDBs e não são descritos aqui.
