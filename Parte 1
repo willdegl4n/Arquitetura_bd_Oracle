@@ -1,22 +1,16 @@
 Arquitetura do banco de dados Oracle (Parte 1)
 
 Boa tarde a todos, hoje vou iniciar uma seria de postagem falando um pouco da arquitetura do banco de dados Oracle.
-
-
 E nessa primeira postagem vou fazer um overview mostrando todos os componentes macros da arquitetura.
 
-
-O que chamaos de “banco de dados” no Oracle, é, na verdade, composto por três componentes principais:
+O que chamamos de “banco de dados” no Oracle, é, na verdade, composto por três componentes principais:
 
 - Processos em Background
 - Estrutura de Memória
-Obs: O que chamamos de “Instancia” e composto por esses dois componentes, uma instância nada mais é do que o banco de dados carregado na memória. 
 - Estrutura Física
-
+    Obs: O que chamamos de “Instancia” e composto por esses dois componentes, uma instância nada mais é do que o banco de dados carregado na memória. 
 
 Hoje falarei sobre os processos em background
-
-
 --> Processos em Background:
 
 - Os BACKGROUND PROCESS fazem parte da instância do banco de dados e executam tarefas de manutenção necessárias para operar o banco de dados e maximizar o desempenho para vários usuários. 
