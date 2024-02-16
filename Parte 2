@@ -6,15 +6,14 @@ O que chamamos de “banco de dados” no Oracle, é, na verdade, composto por t
 
 - Processos em Background
 - Estrutura de Memória
-Obs: O que chamamos de “Instancia” e composto por esses dois componentes, uma instância nada mais é do que o banco de dados carregado na memória. 
 - Estrutura Física
+    Obs: O que chamamos de “Instancia” e composto por esses dois componentes, uma instância nada mais é do que o banco de dados carregado na memória. 
 
 E agora vou falar sobre as "Estruturas de Memória"
 
 --> Estrutura de Memória 
 
 A memória alocada para o banco de dados Oracle é composta por:
-
 --> Memorias (SGA): 
 - A System Global Area (SGA) é a área de memória compartilhada que contém dados e informações de controle para uma instância do Oracle Database. 
 - Todos os SERVER PROCESS e BACKGROUND PROCESS compartilham o SGA. 
