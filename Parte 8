@@ -1,0 +1,27 @@
+Arquitetura do banco de dados Oracle (Parte 8)
+
+Nas postagens anteriores passei um overview da arquitetura passando pelos tres principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e vamos iniciar com os "Processos em Background".
+
+Na postagem anterior listei os "Processos em Background", agora vou dar detalhes de cada um deles.
+
+Continuando...
+
+- Opcionais
+
+--> Archiver Process (ARCn):
+- Background process que existe apenas quando o banco de dados está no modo ARCHIVELOG e o arquivamento
+- O Log Writer Process (LGWR) não pode reutilizar e sobrescrever um redo log group online até que ele seja arquivado.
+- O banco de dados inicia vários ARCn process conforme necessário para garantir que o arquivamento dos redos log online preenchidos não fique para trás. Os processos possíveis incluem ARC0-ARC9 e ARCa-ARCt (31 destinos possíveis)
+- O parâmetro de inicialização LOG_ARCHIVE_MAX_PROCESSES especifica o número de processos ARCn que o banco de dados chama inicialmente. 
+- Participa do processo de sincronismo quando existe um Data Guard associado.
+
+
+--> Job Queue Coordinator (CJQ0);
+- Background process responsavel por coodenar as execuções dos "jobs" agendados no banco de dados  
+- O CJQ0 é iniciado e interrompido automaticamente conformenecessário pelo Oracle Scheduler. 
+- O parâmetro de inicialização JOB_QUEUE_PROCESSES especifica o número máximo de processos que podem ser criados para a execução de jobs.
+
+
+--> Recover Writer Process (RVWR):
+- Background process usado para fazer o flashback de um banco de dados inteiro. Ou seja, ele desfaz as transações do estado atual do banco de dados para um momento no passado, desde que você tenha os logs de flashback necessários. 
+- Quando o flashback está ativado ou quando há restore point guarantees, o RVWR grava os dados do flashback nos logs do banco de dados do flashback na Fast Recovery Area (FRA).
