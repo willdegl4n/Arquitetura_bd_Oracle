@@ -1,0 +1,26 @@
+Arquitetura do banco de dados Oracle (Parte 7)
+
+Nas postagens anteriores passei um overview da arquitetura passando pelos tres principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e vamos iniciar com os "Processos em Background".
+
+Na postagem anterior listei os "Processos em Background", agora vou dar detalhes de cada um deles.
+
+Continuando...
+
+- Obrigatorios:
+
+--> Listener Registration (LREG):
+- Background process que notifica o "listener" sobre instâncias, serviços, manipuladores e endpoints, ou seja, basicamente e ele quem registra a instancia e seus respectivos serviços no listener.
+
+--> Manageability Monitor Process (MMON);
+- Background process que executa tarefas relacionadas ao Automatic Workload Repository (AWR).
+- O AWR é um repositório de dados históricos de performance que inclui estatísticas cumulativas para o sistema, sessões, instruções SQL individuais, segmentos e serviços, é usado para detecção de problemas e autoajuste.
+- O MMON reúne uma variedade de estatísticas de memória do SGA, filtra e, em seguida, cria snapshots dessas estatísticas a cada 60 minutos no AWR. 
+- 60 minutos é o valor padrão e pode ser alterado. 
+- Ele também executa análises do Automatic Database Diagnostic Monitor (ADDM) e emite alertas para métricas que excedem seus valores de limite.
+
+--> Manageability Monitor Lite Process (MMNL);
+- Background process que também executa tarefas relacionadas ao Automatic Workload Repository (AWR).
+- O AWR é um repositório de dados históricos de performance que inclui estatísticas cumulativas para o sistema, sessões, instruções SQL individuais, segmentos e serviços, é usado para detecção de problemas e autoajuste.
+- O MMNL coleta estatísticas de sessão (como ID do usuário, estado, máquina e o SQL que está executando) e as armazena no "buffer Active Session History" (ASH). 
+- Especificamente, o MMNL alimenta as views V$SESSION e V$SESSION_WAIT a cada segundo na SGA e, em seguida, registra esses dados na visualização V$ACTIVE_SESSION_HISTORY, sessões inativas não são amostradas. 
+- Quando o buffer ASH fica cheio ou quando o MMON tira um snapshot, o MMNL libera o buffer ASH na view DBA_HIST_ACTIVE_SESS_HISTORY no AWR.
