@@ -1,0 +1,35 @@
+Arquitetura do banco de dados Oracle (Parte 6)
+
+Nas postagens anteriores passei um overview da arquitetura passando pelos tres principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e vamos iniciar com os "Processos em Background".
+
+Na postagem anterior listei os "Processos em Background", agora vou dar detalhes de cada um deles.
+
+Continuando...
+
+- Obrigatorios:
+--> Process Monitor (PMON):
+- Background process que verifica periodicamente todos os "server process" para encontrar algum que tenha sido encerrado de forma anormal. 
+- O PMON é então responsável por coordenar a limpeza realizada pelo "Cleanup Main process" (CLMN) e pelos "Cleanup Slave process" (CLnn).
+- Executa o recover de operações pendentes e devolve os recursos para o S.O
+
+
+--> System Monitor (SMON):
+- Background process que executa muitas tarefas de manutenção de banco de dados, incluindo o seguinte:
+- Cria e gerencia os metadados de tablespaces temporária e recupera o espaço usado por segmentos temporários órfãos.
+- Mantém a tablespace de undo on-line, off-line e fazendo o shrink dos segmentos de undo com base nas estatísticas de uso do espaço de undo.
+- Limpa o dicionário de dados quando está em um estado transitório e inconsistente.
+- Mantém o system change number (SCN) para a tabela de mapeamento de tempo usada para oferecer suporte aos recursos do Oracle Flashback
+- O SMON de uma instância pode executar o "instance recovery" para outras instâncias que falharam.
+
+
+--> Recover Process (RECO):
+- Background process que resolve transações distribuídas que estão pendentes devido a uma falha de rede ou sistema em um banco de dados distribuído.
+- Seguindo a premissa da atomicidade, a transação tem que ocorrer com sucesso em todos o bancos de dados envolvidos.
+
+
+--> Process Manager (PMAN);
+- Background process que monitora, gera e interrompe o seguinte, conforme necessário:
+- Dispatcher e shared server process (shared connection)
+- Processos da fila de jobs
+- Agente de conexão e processos de servidor em pool para pools de conexão residentes no banco de dados
+- Background process reiniciáveis
