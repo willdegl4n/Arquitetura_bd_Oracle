@@ -1,0 +1,18 @@
+Nas postagens anteriores passei um overview da arquitetura passando pelos tres principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e vamos iniciar com os "Processos em Background".
+
+Na postagem anterior listei os "Processos em Background", agora vou dar detalhes de cada um deles.
+Continuando...
+
+- Outros processos
+
+--> Flashback Data Archiver (FBDA):
+Processo responsavel pelo rastreamento da tabelas que tem habilitado o "Flashback data archiver".
+O FBDA também é responsável por gerenciar automaticamente o espaço ocupado pelos "Flashback data archiver" e a retenção. 
+O FBDA também acompanha o progresso do arquivamento das transações rastreadas.
+
+--> Space Manager Coordinator (SMCO):
+Esse processo em segundo plano coordena a execução de várias tarefas de gerenciamento de espaço, incluindo alocação proativa de espaço e recuperação de espaço. 
+O SMCO gera dinamicamente processos escravos (Wnnn) para implementar essas tarefas.
+
+--> Referencia de todos os processos
+https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/background-processes.html#GUID-86184690-5531-405F-AA05-BB935F57B76D
