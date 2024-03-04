@@ -1,0 +1,37 @@
+Arquitetura do banco de dados Oracle (Parte 11)
+
+Nas postagens anteriores passei um overview da arquitetura passando pelos três principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e agora vou falar da "Estrutura de Memória".
+Toda a magia do banco de dados Oracle acontece na memória, quando o banco de dados é criado é necessário dizer quanto de memória do servidor será destinada ao banco de dados, e é com essa memória que o oracle ira trabalhar. Desse total de memória uma seria de subestruturas existem cada uma com um objetivo em específico, na postagem anterior falei sobre a SGA e a PGA, estarei agora falando em detalhes das subestruturas que existem dentro da SGA.
+- SGA
+ |SHARED POOL
+ ->DICTIONARY CACHE
+ ->LIBRARY CACHE
+ =>Shared SQL area
+ =>Private SQL area
+ ->SERVER RESULT CACHE
+ =>SQL Query Result Cache
+ =>PL/SQL Function Result Cache
+ -> RESERVED POOL
+ |DATABASE BUFFER CACHE
+ ->DEFAULT POOL
+ ->KEEP POOL
+ ->RECYCLE POOL
+ ->DB_nK_CACHE_SIZE
+ ->FLASH BUFFER AREA
+ |REDO LOG BUFFER
+ |LARGE POOL
+ |JAVA POOL
+ |STREAMS POOL
+ 
+ 
+--> SHARED POOL: 
+A Shared Pool é um componente da System Global Area (SGA) e é responsável por armazenar em cache vários tipos de dados do programa.
+A Shared Pool está envolvido em quase todas as operações que ocorrem no banco de dados. Por exemplo, se um usuário executar uma instrução SQL, o Oracle Database acessará a Shared Pool.
+A Shared Pool é dividido em vários subcomponentes:
+ - Library Cache: É uma estrutura de memória ds Shared Pool que armazena códigos SQL e PL/SQL executáveis. Quando uma instrução SQL é executada, o banco de dados tenta reutilizar o código executado anteriormente. Se uma representação analisada (parse) de uma instrução SQL existir na Library Cache e puder ser compartilhada, o banco de dados reutilizará o código. Essa ação é conhecida como "soft parse" ou "library cache hit". Caso contrário, o banco de dados deve construir uma nova versão executável do código do aplicativo, que é conhecida como "hard parse" ou "library cache miss".
+ - Data Dictionary Cache: Armazena informações sobre objetos do banco de dados (metadados).
+ - Server Result Cache: É um pool de memória dentro da Shared Pool e contém conjuntos de resultados. Bons candidatos para cache de resultados são funções invocadas com frequência que dependem de dados relativamente estáticos.
+ - Composto por: 
+ SQL Query Result cache: Armazena os resultados de consultas e fragmentos de consulta.
+ PL/SQL Function Result cache: Armazena conjuntos de resultados de funções
+ - Reserved Pool: É uma área de memória na Shared Pool que o Oracle Database pode usar para alocar grandes partes contíguas de memória. O banco de dados aloca memória da Shared Pool em blocos. Dessa forma, o banco de dados reduz a possibilidade de ficar sem memória contígua devido à fragmentação.
