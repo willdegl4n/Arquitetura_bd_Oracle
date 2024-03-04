@@ -3,7 +3,7 @@ Arquitetura do banco de dados Oracle (Parte 4)
 Nas postagens anteriores passei um overview da arquitetura passando pelos tres principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e vamos iniciar com os "Processos em Background".
 
 Segue quais são os "Processos em Background" do Oracle:
-
+ 
 --> Obrigatorios:
 - Database Writer (DBWn)
 - Log Writer (LGWR)
