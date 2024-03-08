@@ -1,0 +1,38 @@
+Arquitetura do banco de dados Oracle (Parte 12)
+
+Nas postagens anteriores passei um overview da arquitetura passando pelos três principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e agora vou falar da "Estrutura de Memória".
+Toda a magia do banco de dados Oracle acontece na memória, quando o banco de dados é criado é necessário dizer quanto de memória do servidor será destinada ao banco de dados, e é com essa memória que o oracle ira trabalhar. Desse total de memória uma seria de subestruturas existem cada uma com um objetivo em específico, na postagem anterior falei sobre a SGA e a PGA, estarei agora falando em detalhes das subestruturas que existem dentro da SGA.
+- SGA
+ |SHARED POOL
+ ->DICTIONARY CACHE
+ ->LIBRARY CACHE
+ =>Shared SQL area
+ =>Private SQL area
+ ->SERVER RESULT CACHE
+ =>SQL Query Result Cache
+ =>PL/SQL Function Result Cache
+ -> RESERVED POOL
+ |DATABASE BUFFER CACHE
+ ->DEFAULT POOL
+ ->KEEP POOL
+ ->RECYCLE POOL
+ ->DB_nK_CACHE_SIZE
+ ->FLASH BUFFER AREA
+ |REDO LOG BUFFER
+ |LARGE POOL
+ |JAVA POOL
+ |STREAMS POOL
+
+Continuando... 
+ 
+--> Database Buffer Cache: 
+Armazena cópias de blocos de dados lidos dos datafiles. 
+Um buffer é um pedaço de memória do tamanho de um bloco de banco de dados. 
+Cada buffer tem um endereço chamado Database Buffer Address (DBA). 
+Todos os usuários conectados simultaneamente a uma instância de banco de dados compartilham o acesso ao Database Buffer Cache. 
+Os objetivos do Database Buffer Cache são otimizar o I/O e manter os blocos acessados com frequência no Database Buffer Cache e gravar os blocos acessados com pouca frequência no disco.
+O Database Buffer Cache é dividido em vários subcomponentes:
+ - Default Pool: É o local onde os blocos são normalmente armazenados em cache. O tamanho de bloco padrão é 8 KB. A menos que você configure pools separados manualmente, o pool padrão é o único buffer pool. A configuração opcional dos outros pools não tem efeito no pool padrão.
+ - Keep Pool: Destina-se a blocos que foram acessados com frequência, mas que ficaram fora do pool padrão por falta de espaço. O propósito de manter o pool de buffers é reter objetos especificados na memória, evitando assim operações de I/O.
+ - Recycle Pool: Destina-se a blocos que são usados com pouca frequência. Evita que objetos especificados consumam espaço desnecessário no Default Pool.
+ - Flash Buffer Area: Uma area de memoria adicional que armazenas os blocos menos acessados ao inves de escrever de volta em disco. Essa area e uma area de acesso mais rapida assim evitando I/O.
