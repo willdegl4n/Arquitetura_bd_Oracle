@@ -1,0 +1,59 @@
+Arquitetura do banco de dados Oracle (Parte 13)
+
+Nas postagens anteriores passei um overview da arquitetura passando pelos três principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e agora vou falar da "Estrutura de Memória".
+Toda a magia do banco de dados Oracle acontece na memória, quando o banco de dados é criado é necessário dizer quanto de memória do servidor será destinada ao banco de dados, e é com essa memória que o oracle ira trabalhar. Desse total de memória uma seria de subestruturas existem cada uma com um objetivo em específico, na postagem anterior falei sobre a SGA e a PGA, estarei agora falando em detalhes das subestruturas que existem dentro da SGA.
+
+- SGA
+ |SHARED POOL
+ ->DICTIONARY CACHE
+ ->LIBRARY CACHE
+ =>Shared SQL area
+ =>Private SQL area
+ ->SERVER RESULT CACHE
+ =>SQL Query Result Cache
+ =>PL/SQL Function Result Cache
+ -> RESERVED POOL
+ |DATABASE BUFFER CACHE
+ ->DEFAULT POOL
+ ->KEEP POOL
+ ->RECYCLE POOL
+ ->DB_nK_CACHE_SIZE
+ ->FLASH BUFFER AREA
+ |REDO LOG BUFFER
+ |LARGE POOL
+ |JAVA POOL
+ |STREAMS POOL
+
+Continuando... 
+ 
+--> Redo Log Buffer:
+É um buffer circular na SGA que contém informações sobre alterações feitas no banco de dados. 
+As entradas de redo contêm as informações necessárias para reconstruir (ou refazer) as alterações feitas no banco de dados por linguagem de manipulação de dados (DML), linguagem de definição de dados (DDL) ou operações internas. 
+As entradas de redo são usadas para recuperação do banco de dados, se necessário.
+--> Large Pool: 
+É uma área de memória opcional que pode configurar para fornecer grandes alocações de memória para o seguinte:
+ - Backups e restores
+ - Parallel Queue operations 
+ - I/O Buffer Area 
+ - UGA 
+--> Java Pool: 
+É usado para todos os dados e códigos Java específicos da sessão na Java Virtual Machine (JVM). 
+A memória do Java Pool é usada de maneiras diferentes, dependendo do modo em que o Oracle Database está sendo executado.
+--> Streams Pool: 
+É usado pelos processos integrados de captura e aplicação do Oracle Streams, Data Pump e GoldenGate. 
+O Streams Pool armazena mensagens de fila em buffer e fornece memória para os processos de captura e de aplicação do Oracle Streams. 
+A menos que você o configure especificamente, o tamanho do pool de Streams começa em zero. 
+O tamanho do pool cresce dinamicamente conforme necessário quando o Oracle Streams é usado.
+--> In-Memory Area:
+É um componente opcional que permite que objetos (tabelas, partições e outros tipos) sejam armazenados na memória em um novo formato conhecido como formato colunar. 
+Esse formato permite que varreduras, junções e agregações sejam executadas muito mais rapidamente do que o formato tradicional em disco, fornecendo relatórios rápidos e desempenho DML para ambientes OLTP e DW. 
+Esse recurso é particularmente útil para aplicativos analíticos que operam em algumas colunas retornando muitas linhas, em vez de OLTP, que opera em algumas linhas retornando muitas colunas.
+--> Flashback Buffer:
+É um componente opcional na SGA. Quando o Flashback Database é ativado, o processo em segundo plano chamado Recovery Writer Process (RVWR) é iniciado. 
+O RVWR copia periodicamente blocos modificados do database buffer cache para o Flashback Buffer e grava sequencialmente os dados de Flashback Database do Flashback Buffer para os logs do Flashback Database, que são reutilizados circularmente.
+--> Memoptimize Pool: 
+É um componente opcional que fornece alto desempenho e escalabilidade para consultas baseadas em chave, usa a estrutura de índice de hash para otimização e evitar I/O em disco.
+--> Shared I/O Pool:
+Usado para grandes operações de I/O em SecureFile Large Objects (LOBs). LOBs são um conjunto de tipos de dados projetados para armazenar grandes quantidades de dados. SecureFile é um parâmetro de armazenamento LOB que permite desduplicação, criptografia e compactação.
+--> Fixed SGA:
+É uma área de manutenção interna que contém informações gerais sobre o estado do banco de dados e da instância do banco de dados e informações comunicadas entre os processos.
