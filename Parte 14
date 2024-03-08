@@ -1,0 +1,31 @@
+Arquitetura do banco de dados Oracle (Parte 14)
+
+Nas postagens anteriores passei um overview da arquitetura passando pelos três principais pontos (Processos em Background, Estrutura de Memória, Estrutura Física) de forma macro, a partir de agora vamos entrar no detalhes de cada um desses tres pontos, e agora vou falar da "Estrutura de Memória".
+Toda a magia do banco de dados Oracle acontece na memória, quando o banco de dados é criado é necessário dizer quanto de memória do servidor será destinada ao banco de dados, e é com essa memória que o oracle ira trabalhar. Desse total de memória uma seria de subestruturas existem cada uma com um objetivo em específico, na postagem anterior falei sobre a SGA e a PGA, estarei agora falando em detalhes das subestruturas que existem dentro da PGA.
+PGA
+ |UGA
+ ->SQL WORK AREAS
+ =>Sort Area
+ ->SESSION MEMORY
+ => Session Variables
+ => OLAP Pool 
+ ->PRIVATE SQL AREA
+ =>Persistent Area
+ =>Run-time Area
+ =>Cursor Area 
+ |STACK SPACE
+ |HASH AREA
+ |BITMAP MERGE AREA
+ 
+A Program Global Area (PGA) é uma região de memória não compartilhada que contém dados e informações de controle exclusivamente para ser usado pelos server processes e backgroun processes.
+SQL Work Area (UGA): Usada por funções que ordenam dados (sort), como ORDER BY e GROUP BY. 
+ Composta por: Sort Area
+Private SQL Area (UGA): Esta área contém informações sobre uma instrução SQL analisada (parse) e outras informações específicas da sessão para processamento. Quando um processo de servidor executa código SQL ou PL/SQL, o processo usa a Private SQL Area para armazenar valores de variáveis de "bind", informações de estado de execução de consulta e áreas de trabalho de execução de consulta.
+ Composta por: Persistent Area, Runtime Area 
+Session Memory (UGA): Alocada para variáveis de sessão, como informações de logon e outras informações exigidas por uma sessão de banco de dados.
+ Composta por: Session Variables, OLAP Pool
+Stack Space: Memória alocada para armazenar variáveis e matrizes de sessão.
+Hash Area: Usada para realizar hash joins de tabelas.
+Bitmap Merge Area: Área é usada para mesclar dados recuperados de varreduras de vários índices de bitmap
+Dedicated server connection: Server processes dedicado para cada usuários cliente. O UGA e individual de cada usuários cliente. 
+Shared server connection: Vários usuários clientes compartilham o mesmo server processes. O UGA é movido para a large pool.
